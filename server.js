@@ -1,15 +1,15 @@
 
 // import {usersToUpload} from '1Users-List.js'
 const express = require('express')
-const cookieParser = require('cookie-parser')
+// const cookieParser = require('cookie-parser')
 // const session = require('express-session')
 
 
 // const userService = require('./services/user-service')
 // const carService = require('./services/1OLDcar-service')
-const storyService = require('./services/story-service')
-const userService = require('./services/user-service')
-const loginService = require('./services/login-service')
+// const storyService = require('./services/story-service')
+// const userService = require('./services/user-service')
+// const loginService = require('./services/login-service')
 const app = express()
 const port = process.env.PORT || 3000
 
@@ -20,16 +20,15 @@ app.use(cors())
 
 // Express App Configuration
 // We ask Express.js to serve static files from the 'public' folder
+// app.use(cookieParser())
 app.use(express.static('public'))
-app.use(cookieParser())
 app.use(express.json())
 
 
-app.post('/login', async (req, res) => {
+app.post('/product', async (req, res) => {
     try{
-    let loggedIn = await loginService.checkLogin(req.body)
-    // console.log('!!!!!!!! ',loggedIn)
-    res.send(loggedIn)
+    let products = await dataService.addProduct(req.body)
+    res.send(products)
     }
     catch (err) {
         console.log('Error! ', err)
@@ -40,10 +39,10 @@ app.post('/login', async (req, res) => {
 
 
 
-app.get('/user/:userId',async (req, res) => {
+app.get('/products',async (req, res) => {
 try{
-    let user = await userService.getUserById(req.params.userId)
-res.send(user)
+    let products = await dataService.getProducts()
+res.send(products)
 }
 catch (err) {
     console.log('Error! ', err)
@@ -53,23 +52,35 @@ res.status(401).send('Sorry, error')
 })
 
 
-app.get('/username/:name', async (req, res) => {
+app.get('/cart', async (req, res) => {
     try{
-        let user = await userService.getUserByName(req.params.name)
-    res.send(user)
+        let cart = await dataService.getCart()
+    res.send(cart)
     }
     catch (err) {
         console.log('Error! ', err)
-    res.status(401).send('Sorry, error')
+        res.status(401).send('Sorry, error')
     }
 
 })
 
-app.get('/userAll', async (req, res) => {
+app.get('/sales', async (req, res) => {
     try{
-        let users = await userService.getAll()
+        let sales = await dataService.getSales()
         // console.log('SERVER JS ', user)
-    res.send(users)
+    res.send(sales)
+    }
+    catch (err) {
+        console.log('Error! ', err)
+        res.status(401).send('Sorry, error')
+    }
+    
+    })
+
+app.get('/uniqueSales', async (req, res) => {
+    try{
+        let uniqueSales = await dataService.getUniqueSales()
+        res.send(uniqueSales)
     }
     catch (err) {
         console.log('Error! ', err)
@@ -77,19 +88,6 @@ app.get('/userAll', async (req, res) => {
     }
     
     })
-
-app.post('/user', async (req, res) => {
-    let user = req.body
-    try{
-    newUser = await userService.create(user)    
-    res.send(newUser)
-    }
-    catch (err) {
-        console.log('Error! ', err)
-res.status(401).send('Sorry, error')
-    }
-    
-})
 
 app.put('/user', async (req, res) => {
     try{
@@ -103,9 +101,9 @@ res.status(401).send('Sorry, error')
     
 })
 
-app.delete('/user', async (req, res) => {
+app.delete('/product', async (req, res) => {
     try{
-        let user = await userService.remove(req.query)
+        let user = await dataService.deleteProduct(req.query)
     res.send(user)
     }
     catch (err) {

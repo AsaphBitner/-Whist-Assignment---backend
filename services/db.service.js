@@ -5,7 +5,7 @@ const MongoClient = require('mongodb').MongoClient;
 const url = `mongodb+srv://user-01:asaphb123@cluster0.rzmg8.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
 
 // Database Name
-const dbName = 'asaphstagram';
+const dbName = 'whist_assignment';
 
 var dbConn = null;
 

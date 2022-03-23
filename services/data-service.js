@@ -13,7 +13,7 @@ module.exports = {
     getUniqueSales,
     updateProduct,
     deleteProduct,
-    deletecartItem,
+    deleteCartItem,
 }
 
 
@@ -148,7 +148,9 @@ async function updateProduct(product) {
 
     async function deleteProduct(productId) {
         try {
+            // const product = JSON.parse(Js/)
             const collection = await dbService.getCollection('products')
+            // console.log(collection)
             return await collection.deleteOne({ _id: ObjectId(productId) })
     } catch (err) {
         console.log(`ERROR: cannot remove product ${productId}`)
@@ -156,7 +158,7 @@ async function updateProduct(product) {
     }
 }
 
-async function deletecartItem(itemId) {
+async function deleteCartItem(itemId) {
     try {
         const collection = await dbService.getCollection('cart')
         return await collection.deleteOne({ _id: ObjectId(itemId) })

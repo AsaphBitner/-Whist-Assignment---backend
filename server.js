@@ -5,34 +5,31 @@ const express = require('express')
 // const session = require('express-session')
 
 const dataService = require('./services/data-service')
-// const loginService = require('./services/login-service')
 const app = express()
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 3001
 
 var cors = require('cors')
 app.use(cors())
 
+// dataService.createProductsList()
 
-
-// Express App Configuration
-// We ask Express.js to serve static files from the 'public' folder
-// app.use(cookieParser())
 app.use(express.static('public'))
 app.use(express.json())
 
-dataService.createProductsList()
+
+
 
 app.post('/product', async (req, res) => {
     try{
-    let products = await dataService.addProduct(req.body)
-    res.send(products)
+        let products = await dataService.addProduct(req.body)
+        res.send(products)
     }
     catch (err) {
         console.log('Error! ', err)
-    res.status(401).send('Sorry, error')
+        res.status(401).send('Sorry, error')
     }
     
-    })
+})
 
 
 app.post('/sale', async (req, res) => {
@@ -42,44 +39,44 @@ app.post('/sale', async (req, res) => {
     }
     catch (err) {
         console.log('Error! ', err)
-    res.status(401).send('Sorry, error')
+        res.status(401).send('Sorry, error')
     }
     
-    })
+})
 
 app.post('/unique_sale', async (req, res) => {
     try{
-    let uniqueSales = await dataService.addUniqueSale(req.body)
-    res.send(uniqueSales)
+        let uniqueSales = await dataService.addUniqueSale(req.body)
+        res.send(uniqueSales)
     }
     catch (err) {
         console.log('Error! ', err)
-    res.status(401).send('Sorry, error')
+        res.status(401).send('Sorry, error')
     }
     
     })
 
-app.post('/cart_item', async (req, res) => {
-    try{
-    let cart = await dataService.addCartItem(req.body)
-    res.send(cart)
-    }
-    catch (err) {
+    app.post('/cart_item', async (req, res) => {
+        try{
+            let cart = await dataService.addCartItem(req.body)
+            res.send(cart)
+        }
+        catch (err) {
         console.log('Error! ', err)
-    res.status(401).send('Sorry, error')
+        res.status(401).send('Sorry, error')
     }
     
-    })
+})
 
 
 app.get('/products',async (req, res) => {
-try{
-    let products = await dataService.getProducts()
-res.send(products)
-}
+    try{
+        let products = await dataService.getProducts()
+        res.send(products)
+    }
 catch (err) {
     console.log('Error! ', err)
-res.status(401).send('Sorry, error')
+    res.status(401).send('Sorry, error')
 }
 
 })
@@ -134,10 +131,11 @@ res.status(401).send('Sorry, error')
     
 })
 
-app.delete('/product', async (req, res) => {
+app.options('/product/:id', cors())
+app.delete('/product/:id', async (req, res) => {
     try{
-        let product = await dataService.deleteProduct(req.query)
-    res.send(product)
+        let product = await dataService.deleteProduct(req.params.id)
+        res.send(product)
     }
     catch (err) {
         console.log('Error! ', err)
@@ -146,10 +144,11 @@ res.status(401).send('Sorry, error')
     
 })
 
+app.options('/cart_item/:id', cors())
 
-app.delete('/cart_item', async (req, res) => {
+app.delete('/cart_item/:id', async (req, res) => {
     try{
-        let cartItem = await dataService.deleteCartItem(req.query)
+        let cartItem = await dataService.deleteCartItem(req.params.id)
     res.send(cartItem)
     }
     catch (err) {
@@ -159,69 +158,6 @@ res.status(401).send('Sorry, error')
     
 })
 
-//==================================================================
-// app.get('/user/:userId',async (req, res) => {
-// // 
-
-// app.get('/story/:storyId', async (req, res) => {
-//     try{
-//         let story = await storyService.getStoryById(req.params.storyId)
-//         res.send(story)
-//     }
-//     catch (err) {
-//         console.log('Error! ', err)
-//         res.status(401).send('Sorry, error')
-//     }
-
-// })
-
-// app.get('/storyAll', async (req, res) => {
-//     try{
-//         let stories = await storyService.getAll()
-//     res.send(stories)
-//     }
-//     catch (err) {
-//         console.log('Error! ', err)
-//     res.status(401).send('Sorry, error')
-//     }
-    
-//     })
-
-// app.post('/story', async (req, res) => {
-//     let story = req.body
-//     try{
-//     newStory = await storyService.create(story)    
-//     res.send(newStory)
-//     }
-//     catch (err) {
-//         console.log('Error! ', err)
-// res.status(401).send('Sorry, error')
-//     }
-    
-// })
-
-// app.put('/story', async (req, res) => {
-//     try{
-//         let story = await storyService.update(req.body)
-//     res.send(story)
-//     }
-//     catch (err) {
-//         console.log('Error! ', err)
-// res.status(401).send('Sorry, error')
-//     }
-    
-// })
-
-// app.delete('/story/:storyId', async (req, res) => {
-//     try{
-//         let story = await storyService.remove(req.params.storyId)
-//             res.send(story)
-//     }
-//     catch (err) {
-//         console.log('Error! ', err)
-//         res.status(401).send('Sorry, error')
-//     }
-// })
 
 
 
